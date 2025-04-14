@@ -2,45 +2,20 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## To Run the App
+The app will run React and Express concurrently
+1. `pnpm install`
+2. `npm run dev`
 
-In the project directory, you can run:
+## Reasoning
+- Trying to make an API call directly from the React app will result in a CORS error. To resolve this issue, I used Express as a forward proxy to the dog API endpoint. Because I don't have access to the API, I can't disable CORS.
+- Since the API can fail, I used a retry policy to handle errors from the API. A low retry count is used to prevent retry storms.
+- I added placeholders if the API (after retries) returns an error so we don't mess up the indexing for the dogs. It also provides a more consistent experience for the user, so that way they don't see gaps with missing items on a page or dogs they wouldn't have seen otherwise if the API haven't failed.
+    - For example, with zero-indexing, the 15th dog from the API shouldn't be displayed on the first page, but rather the second page. If the first two API pages failed to load, but the third API page succeeded, it will display dogs with indices 14 to 20, which provides an inconsistent view to the user
+- Hardcode upper page limit to 12 pages, since API goes up to page 25. Each API page has 7 items, so ceil(25 * 7 / 15) = 12 total web pages are needed.
 
-### `npm start`
+## Follow-ups
+- Write unit tests for client logic with Jest
+- Write integration tests for UI logic with Selenium
+- Add retry logic to proxy server and throttling the client
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
