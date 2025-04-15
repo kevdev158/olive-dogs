@@ -19,3 +19,48 @@ The app will run React and Express concurrently
 - Write integration tests for UI logic with Selenium
 - Add retry logic to proxy server and throttling the client
 
+## Prompts
+### Cursor
+Create a web app that displays 15 items per page. The page has a "next" and "previous" button  
+  
+The items have the following properties:  
+- "breed" - string; breed of dog  
+- "image" - string; url to an image; this can be bull  
+  
+If "image" is null, use a placeholder image instead.  
+  
+The UI will be populated from calling an API. The API endpoint is "https://interview-api-olive.vercel.app/api/dogs?page=<ipage_num>", where each API to returns 7 items. In the following format:  
+```  
+[  
+{  
+"breed": "string",  
+"image": string",  
+},  
+....  
+]  
+```  
+  
+The API may return an error, which should be retried at least once. The error message has the following format:  
+```  
+{  
+"error": "error reason"  
+}  
+```
+
+-----
+Use tailwind CSS
+
+------
+There's a CORs issue, not allowing the request to get to the API endpoint. Can you provide some options for fixing this?
+
+----
+When loading, I want it to display some animation so I know to wait
+
+----
+setup logging with Bunyan in server.js
+
+----
+
+### ChatGPT
+The dogs API `/api/dogs?page={num}` returns 7 items per page. My react app displays 15 items per page. I need to calculate the offset to display the dogs per page without re-displaying dogs from previous pages.
+
